@@ -2,11 +2,11 @@ import express from "express";
 import { hp, compare } from "./password";
 import { create } from "./jwt";
 import middleware from "./middleware";
+import { viewUser, addUser, findUser } from "./db";
 
 const router = express.Router();
 
 // in-memory database
-const users = [];
 
 router.post("/signup", async (req, res) => {
   const { username, password } = req.body;
@@ -15,19 +15,18 @@ router.post("/signup", async (req, res) => {
       .status(400)
       .json({ message: "Username and Password are required." });
   }
-  if (users.find((u) => u.username === username)) {
+  if (findUser(username)) {
     return res.status(409).json({ message: "User already exists." });
   }
   const hash = await hp(password);
-  users.push({ username, password: hash });
-
-  console.log("Users:", users);
+  addUser(username, hash);
+  console.log("Users:", viewUser());
   res.status(201).json({ message: "User created successfully." });
 });
 
 router.post("/login", async (req, res) => {
   const { username, password } = req.body;
-  const user = users.find((u) => u.username === username);
+  const user = findUser(username);
   if (!user) {
     return res.status(401).json({ message: "Invalid credentials." });
   }
