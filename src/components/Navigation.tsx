@@ -11,7 +11,7 @@ const Navigation = () => {
 
   return (
     <nav className="bg-card/80 border-b border-border sticky top-0 z-50 backdrop-blur-md">
-      <div className="max-w-6xl mx-auto px-4">
+      <div className="max-w-full px-4">
         <div className="flex items-center justify-between h-16">
           <div className="flex-1" />
 
