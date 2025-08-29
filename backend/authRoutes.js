@@ -1,8 +1,8 @@
 import express from "express";
-import { hp, compare } from "./password";
-import { create } from "./jwt";
-import middleware from "./middleware";
-import { viewUser, addUser, findUser } from "./db";
+import { hp, compare } from "./password.js";
+import { create } from "./jwt.js";
+import middleware from "./middleware.js";
+import { viewUser, addUser, findUser } from "./db.js";
 
 const router = express.Router();
 

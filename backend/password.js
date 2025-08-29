@@ -13,7 +13,7 @@ async function hp(password) {
   });
 }
 async function compare(password, storedHash) {
-  return new Promise((res, rej) => {
+  return new Promise((resolve, reject) => {
     const [salt, key] = storedHash.split(":");
     // hash incoming password with stored salt
     crypto.scrypt(password, salt, 64, (err, derivedKey) => {

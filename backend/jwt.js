@@ -1,5 +1,5 @@
 import crypto from "crypto";
-import { SECRET_KEY } from "./password";
+import { SECRET_KEY } from "./password.js";
 
 function base64urlEncode(str) {
   return Buffer.from(str)

@@ -1,4 +1,4 @@
-import { verify } from "./jwt";
+import { verify } from "./jwt.js";
 
 function middleware(req, res, next) {
   const authHeader = req.headers["authorization"];

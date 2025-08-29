@@ -1,27 +1,89 @@
-import { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { useToast } from '@/hooks/use-toast';
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useToast } from "@/hooks/use-toast";
 
 const Auth = () => {
   const [isLoading, setIsLoading] = useState(false);
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
   const { toast } = useToast();
 
-  const handleAuth = async (e: React.FormEvent, type: 'login' | 'signup') => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    
-    // Simulate API call
-    setTimeout(() => {
-      setIsLoading(false);
-      toast({
-        title: `${type === 'login' ? 'Login' : 'Signup'} Successful`,
-        description: `Welcome! ${type === 'login' ? 'You have been logged in.' : 'Account created successfully.'}`,
+
+    try {
+      const response = await fetch("http://localhost:3000/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ username, password }),
       });
-    }, 1000);
+      const data = await response.json();
+      if (response.ok) {
+        toast({
+          title: "Login Successful",
+          description: "Welcome back! You have been logged in.",
+        });
+        localStorage.setItem("token", `Bearer ` + data.token); // storing the jwt locally with the bearer prefix for middleware
+      } else {
+        throw new Error(data.message || "Invalid credentials.");
+      }
+    } catch (err) {
+      console.error("Error while logging in: ", err);
+      toast({
+        title: "Login Failed",
+        description: err.message,
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleSignup = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+
+    try {
+      const response = await fetch("http://localhost:3000/auth/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ username, password }),
+      });
+      const data = await response.json();
+      if (response.ok) {
+        toast({
+          title: "Successfully created account.",
+          description: "Welcome! You have been signed up. Please log in.",
+        });
+      } else {
+        throw new Error(data.message || "Invalid credentials.");
+      }
+    } catch (err) {
+      console.error("Error while signup: ", err);
+      toast({
+        title: "Signup Failed",
+        description: err.message,
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -29,7 +91,9 @@ const Auth = () => {
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-foreground mb-2">Welcome</h1>
-          <p className="text-muted-foreground">Sign in to your account or create a new one</p>
+          <p className="text-muted-foreground">
+            Sign in to your account or create a new one
+          </p>
         </div>
 
         <Card className="shadow-[var(--shadow-card)]">
@@ -45,15 +109,17 @@ const Auth = () => {
                 <TabsTrigger value="login">Login</TabsTrigger>
                 <TabsTrigger value="signup">Sign Up</TabsTrigger>
               </TabsList>
-              
+
               <TabsContent value="login" className="space-y-4 mt-6">
-                <form onSubmit={(e) => handleAuth(e, 'login')} className="space-y-4">
+                <form onSubmit={(e) => handleLogin(e)} className="space-y-4">
                   <div className="space-y-2">
                     <Label htmlFor="login-email">Email</Label>
                     <Input
                       id="login-email"
                       placeholder="Enter your email"
                       type="email"
+                      value={username}
+                      onChange={(e) => setUsername(e.target.value)}
                       required
                     />
                   </div>
@@ -63,26 +129,26 @@ const Auth = () => {
                       id="login-password"
                       placeholder="Enter your password"
                       type="password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
                       required
                     />
                   </div>
-                  <Button 
-                    type="submit" 
-                    className="w-full" 
-                    disabled={isLoading}
-                  >
-                    {isLoading ? 'Signing in...' : 'Sign In'}
+                  <Button type="submit" className="w-full" disabled={isLoading}>
+                    {isLoading ? "Signing in..." : "Sign In"}
                   </Button>
                 </form>
               </TabsContent>
-              
+
               <TabsContent value="signup" className="space-y-4 mt-6">
-                <form onSubmit={(e) => handleAuth(e, 'signup')} className="space-y-4">
+                <form onSubmit={(e) => handleSignup(e)} className="space-y-4">
                   <div className="space-y-2">
                     <Label htmlFor="signup-name">Full Name</Label>
                     <Input
                       id="signup-name"
                       placeholder="Enter your name"
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
                       required
                     />
                   </div>
@@ -92,6 +158,8 @@ const Auth = () => {
                       id="signup-email"
                       placeholder="Enter your email"
                       type="email"
+                      value={username}
+                      onChange={(e) => setUsername(e.target.value)}
                       required
                     />
                   </div>
@@ -101,15 +169,13 @@ const Auth = () => {
                       id="signup-password"
                       placeholder="Create a password"
                       type="password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
                       required
                     />
                   </div>
-                  <Button 
-                    type="submit" 
-                    className="w-full" 
-                    disabled={isLoading}
-                  >
-                    {isLoading ? 'Creating account...' : 'Create Account'}
+                  <Button type="submit" className="w-full" disabled={isLoading}>
+                    {isLoading ? "Creating account..." : "Create Account"}
                   </Button>
                 </form>
               </TabsContent>
