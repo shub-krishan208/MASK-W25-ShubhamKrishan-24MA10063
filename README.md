@@ -1,5 +1,22 @@
 # Mask Selection Task
 
+## About me:
+
+```bash
+name: Shubham Krishan
+roll: 24MA10063
+discord: shub.krishan208
+MAL: shub-krishan208
+Anilist: N/A
+description: tech nerd who is fascinated by tech everywhere he goes, then comes my obsession with the world of anime. Imagine skipping classes just to read those last 20 chapters of that damn manhwa! Really enjoy AMVs too ... I loved the "MIDDLE OF THE NIGHT" edit for anime mix, cwazy stuff <3
+```
+
+### Tech experience:
+
+Recently got into linux and webdev. Enjoying myself since then, I am pretty comfortable with all aspects of full-stack projects. I am appointed as Web Secretary in TSG so I work on such stuff quite frequently. I enjoy bash scripting too (for automating my life).
+
+For, some of my projects checkout my repos for tsg-noticeboard or blockchain project.
+
 ## to Run and Test
 
 Run the following command in your termianl.
