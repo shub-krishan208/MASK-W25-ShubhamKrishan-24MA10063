@@ -90,6 +90,9 @@ export default function Quiz() {
       setScore((s) => s - 5);
       setFeedback("wrong");
     }
+    // sending score data
+    console.log(`sending score: ${score}`);
+    sendScore(score);
 
     // Move to next question after 1.2s
     setTimeout(() => {
@@ -164,26 +167,11 @@ export default function Quiz() {
   const [final, setFinal] = useState(0);
   useEffect(() => {
     if (currentIndex > 9) {
-      const getSetFinal = async () => {
-        console.log("Getting final score ...");
-        try {
-          const ans = await finalScore();
-          if (ans) {
-            setFinal(ans);
-          } else {
-            console.log("Error receiving the final score.");
-          }
-        } catch (err) {
-          throw new Error("Error to fetch final score: ", err);
-        }
-      };
-      getSetFinal();
-    } else {
-      // sending score data
-      console.log(`sending score: ${score}`);
       sendScore(score);
+      console.log("Getting final score ...");
+      setFinal(finalScore);
     }
-  }, [currentIndex, score]);
+  }, [currentIndex]);
 
   return (
     <div className="min-h-screen bg-background text-foreground px-4 sm:px-8 py-6 relative overflow-hidden">

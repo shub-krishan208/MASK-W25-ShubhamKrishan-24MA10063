@@ -16,7 +16,7 @@ export default function Index() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     // send the info to the backend
-
+    console.log("Creating new user ...");
     try {
       const res = await fetch("http://localhost:5000/api/new", {
         method: "POST",
@@ -34,10 +34,9 @@ export default function Index() {
       }
 
       const data = await res.json(); // assuming backend sends JSON
-      console.log(
-        `Success, user ${username} created with user_id: ${data.userid}`
+      navigate(
+        `/quiz/${formData.username}/${data.userid}/${formData.fav_anime}`
       );
-      navigate(`/quiz/${formData.username}/${formData.fav_anime}`);
     } catch (err) {
       console.error("Error submitting form:", err);
       alert("Something went wrong. Please try again.");

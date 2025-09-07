@@ -24,6 +24,7 @@ async function updateUser(req, res) {
     const { score } = req.body;
     if (typeof score !== "number") {
       res.status(400).json({ message: "Provide a number as score!" });
+      return;
     }
     const updatedUser = await user.findByIdAndUpdate(
       userid,
@@ -34,10 +35,11 @@ async function updateUser(req, res) {
     if (!updatedUser) {
       return res.status(404).json({ message: "User not found." });
     }
-
     res
       .status(200)
       .json({ message: "Score updated successfully.", user: updatedUser });
+    const update = await user.findById(userid);
+    console.log("Updated user: ", update); // just for debug chcks
   } catch (err) {
     console.error("Error updating score: ", err);
     res
@@ -48,17 +50,18 @@ async function updateUser(req, res) {
 
 async function getScore(req, res) {
   try {
-    const { _id } = req.body;
-    const score = await user.findById(_id).score;
+    const { _id } = req.params;
+    const score = (await user.findById(_id)).score;
     if (!score) {
       console.error("No score found for user with id: ", _id);
       res.status(400).json({ message: "No score found for the user" });
+      return;
     }
     console.log("User score found: ", score);
     res.status(200).json({ message: "Score found.", score: score });
   } catch (err) {
     console.error("Error while getting scores: ", err);
-    req.status(500).json({ message: "Server error." });
+    res.status(500).json({ message: "Server error." });
   }
 }
 

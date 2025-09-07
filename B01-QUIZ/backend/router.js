@@ -18,7 +18,7 @@ const r = Router();
 
 r.get("/ques/:anime", fetchQuestionByAnime);
 r.get("/verify/:ques_id", verifyQuestion); // exmaple GET request url /verify/ques_id?userAnswer=a
-r.get("/getscore/:id", getScore);
+r.get("/getscore/:_id", getScore);
 r.post("/score/:user", updateUser);
 r.post("/new", makeUser);
 
