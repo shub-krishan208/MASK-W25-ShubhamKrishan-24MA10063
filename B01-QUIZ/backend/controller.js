@@ -67,9 +67,14 @@ async function fetchQuestionByAnime(req, res) {
   try {
     const { anime: anime } = req.params;
 
-    // Find all the questions taht have the anime name given in the parameter.
+    // Find 10 random questions that have the anime name given in the parameter.
     // also prevent from sending the answer to any of the questions
-    const question = await quiz.find({ animeName: anime }).select("-answer");
+    // using aggregate() method to build a pipeline of operations for the above
+    const questions = await Question.aggregate([
+      { $match: { animeName: animeName } },
+      { $sample: { size: 10 } },
+      { $project: { answer: 0 } },
+    ]);
 
     if (!question || question.length === 0) {
       return res

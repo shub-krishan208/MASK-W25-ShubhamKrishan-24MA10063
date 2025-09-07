@@ -1,8 +1,12 @@
 import { mongoose } from "mongoose";
-import Question from "./models/quiz.js";
-import User from "./models/user.js";
 import e from "express";
 import cors from "cors";
+import {
+  populateDemonSlayer,
+  populateJJKQuestions,
+  populateNaruto,
+  populateSteinsGate,
+} from "./quiz_init";
 
 const app = e();
 const PORT = 5000;
@@ -22,6 +26,21 @@ mongoose
   .catch((err) => {
     console.error("❌ Error connecting to MongoDB:", err);
   });
+
+// populate the database first before opening to listening to the frontend:
+async function makeQuiz() {
+  console.log("Starting to populate the database ...");
+  populateJJKQuestions();
+  populateNaruto();
+  populateSteinsGate();
+  populateDemonSlayer();
+
+  console.log(
+    "Setting up the database is completed ... ready to accept requests."
+  );
+}
+
+makeQuiz();
 
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);

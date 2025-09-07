@@ -12,7 +12,12 @@ const questionSchema = new mongoose.Schema({
     unique: true, // No duplicate questions
   },
   options: {
-    type: [String], // Defines an array of strings
+    type: [
+      {
+        symbol: { type: String, required: true },
+        text: { type: String, required: true },
+      },
+    ],
     required: true,
     validate: [
       (arr) => arr.length === 4,
