@@ -1,4 +1,4 @@
-# Mask Selection Task: Round 2
+# Mask Selection Task: Round 2 _B01-QUIZ_
 
 ## Goal
 
@@ -20,7 +20,7 @@ Make a **backend** for a quiz system and a minimal **frontend** to showcase it.
 ## System design:
 
 - backend: node + express
-- endpoints: /:anime/ques/:id, /verify/:id and /score/:user
+- endpoints: /:anime/ques/:id, /verify/:id, /new and /score/:user
 - backend (mongodb):
   - question struct
     - anime name (parent)
@@ -45,3 +45,8 @@ The user goes through the following end-to-end process:
 3. The user is shown a score at the top and they can select from the given options (4 options)
 4. Lastly, there is a overall summary of the quiz (what they did right and what they did wrong) and final score.
 5. Also, there is a retry button (they again have to give a username, the db won't be concerned with unique usernames)
+
+## Todo
+
+1. Need to setup tailwindcss
+2. need to make the frontend
