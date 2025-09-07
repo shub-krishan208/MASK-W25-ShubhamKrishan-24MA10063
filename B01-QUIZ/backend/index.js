@@ -7,6 +7,7 @@ import {
   populateNaruto,
   populateSteinsGate,
 } from "./quiz_init.js";
+import r from "./router.js";
 
 const app = e();
 const PORT = 5000;
@@ -40,7 +41,9 @@ async function makeQuiz() {
   );
 }
 
-makeQuiz();
+await makeQuiz();
+
+app.use("/api", r);
 
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);

@@ -1,14 +1,20 @@
 import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./App.css";
-
+import "./index.css";
+import Index from "./Index.jsx";
+import Quiz from "./quiz.jsx";
+import NotFound from "./NotFound.jsx";
 function App() {
-  const [count, setCount] = useState(0);
-
   return (
     <>
-      <p>Hello weebs!</p>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Index />} />
+          <Route path="/quiz/:username/:fav_anime" element={<Quiz />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </BrowserRouter>
     </>
   );
 }

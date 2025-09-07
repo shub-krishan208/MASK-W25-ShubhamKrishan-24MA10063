@@ -1,5 +1,5 @@
-import user from "./models/user";
-import quiz from "./models/quiz";
+import user from "./models/user.js";
+import quiz from "./models/quiz.js";
 async function makeUser(req, res) {
   try {
     const { username, fav_anime } = req.body;
@@ -64,14 +64,15 @@ async function getScore(req, res) {
 
 // quiz related functions\
 async function fetchQuestionByAnime(req, res) {
+  console.log("Received request to send questions to the frontend ...");
   try {
     const { anime: anime } = req.params;
 
     // Find 10 random questions that have the anime name given in the parameter.
     // also prevent from sending the answer to any of the questions
     // using aggregate() method to build a pipeline of operations for the above
-    const question = await Question.aggregate([
-      { $match: { animeName: animeName } },
+    const question = await quiz.aggregate([
+      { $match: { animeName: anime } },
       { $sample: { size: 10 } },
       { $project: { answer: 0 } },
     ]);
@@ -84,9 +85,7 @@ async function fetchQuestionByAnime(req, res) {
     res.status(200).json(question);
   } catch (err) {
     console.error("Error fetching question:", err);
-    res
-      .status(500)
-      .json({ message: "An error occurred while fetching the question." });
+    res.status(500).json({ message: `server error: ${err}` });
   }
 }
 
@@ -96,7 +95,7 @@ async function fetchQuestionByAnime(req, res) {
  */
 async function verifyQuestion(req, res) {
   try {
-    const { ques_id: _id } = req.params;
+    const { ques_id: ques_id } = req.params;
     // For a GET request, the user's answer should be sent as a query parameter.
     // For example: /verify/12345?userAnswer=itadori
     const { userAnswer } = req.query;
