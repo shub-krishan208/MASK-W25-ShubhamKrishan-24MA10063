@@ -70,7 +70,7 @@ async function fetchQuestionByAnime(req, res) {
     // Find 10 random questions that have the anime name given in the parameter.
     // also prevent from sending the answer to any of the questions
     // using aggregate() method to build a pipeline of operations for the above
-    const questions = await Question.aggregate([
+    const question = await Question.aggregate([
       { $match: { animeName: animeName } },
       { $sample: { size: 10 } },
       { $project: { answer: 0 } },
@@ -98,7 +98,7 @@ async function verifyQuestion(req, res) {
   try {
     const { ques_id: _id } = req.params;
     // For a GET request, the user's answer should be sent as a query parameter.
-    // For example: /verify/12345?userAnswer=a
+    // For example: /verify/12345?userAnswer=itadori
     const { userAnswer } = req.query;
 
     if (!userAnswer) {
