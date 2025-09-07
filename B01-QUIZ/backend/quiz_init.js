@@ -8,7 +8,7 @@
  * @ds demon-slayer
  */
 
-import quiz from "./models/quiz";
+import quiz from "./models/quiz.js";
 
 async function populateJJKQuestions() {
   const questions = [
@@ -237,17 +237,6 @@ async function populateNaruto() {
     },
     {
       animeName: "naruto",
-      question: "What is the name of Megumi Fushiguro's Domain Expansion?",
-      options: [
-        { symbol: "naruto", text: "Unlimited Void" },
-        { symbol: "sasuke", text: "Self-Embodiment of Perfection" },
-        { symbol: "sakura", text: "Malevolent Shrine" },
-        { symbol: "sai", text: "Chimera Shadow Garden" },
-      ],
-      answer: "itadori",
-    },
-    {
-      animeName: "naruto",
       question: "Who is the new member of team 7?",
       options: [
         { symbol: "naruto", text: "Rocklee" },
@@ -460,29 +449,6 @@ async function populateSteinsGate() {
         { symbol: "daru", text: "Luka" },
       ],
       answer: "mayuri",
-    },
-    {
-      animeName: "steins;gate",
-      question: "What was Kurisu's initial reason for showing up at the lab?",
-      options: [
-        {
-          symbol: "kyoma",
-          text: "She is angry at Okabe for groping her earlier and wants to confront him about it",
-        },
-        {
-          symbol: "kurisu",
-          text: "She is invited by Daru to help improve the PhoneWave",
-        },
-        {
-          symbol: "mayuri",
-          text: "She wants to know whether Okabe's claims of seeing her dead were real",
-        },
-        {
-          symbol: "daru",
-          text: "She wants to investigate the PhoneWave after seeing the gelled banana",
-        },
-      ],
-      answer: "daru",
     },
     {
       animeName: "steins;gate",

@@ -6,7 +6,7 @@ import {
   populateJJKQuestions,
   populateNaruto,
   populateSteinsGate,
-} from "./quiz_init";
+} from "./quiz_init.js";
 
 const app = e();
 const PORT = 5000;
@@ -30,10 +30,10 @@ mongoose
 // populate the database first before opening to listening to the frontend:
 async function makeQuiz() {
   console.log("Starting to populate the database ...");
-  populateJJKQuestions();
-  populateNaruto();
-  populateSteinsGate();
-  populateDemonSlayer();
+  await populateJJKQuestions();
+  await populateNaruto();
+  await populateSteinsGate();
+  await populateDemonSlayer();
 
   console.log(
     "Setting up the database is completed ... ready to accept requests."
