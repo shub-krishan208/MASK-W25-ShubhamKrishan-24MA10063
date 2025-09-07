@@ -1,0 +1,15 @@
+services:
+  mongodb:
+    image: mongo:latest
+    container_name: quiz-db
+    restart: always
+    ports:
+      - "27017:27017"
+    environment:
+      # environment variables to be used by the mongodb instance, for security
+      MONGO_INITDB_ROOT_USERNAME: salieri
+      MONGO_INITDB_ROOT_PASSWORD: maho8kurisu
+    volumes:
+      - mongo-data:/data/db
+volumes:
+  mongo-data:
