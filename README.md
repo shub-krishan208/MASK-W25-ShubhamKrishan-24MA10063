@@ -48,5 +48,35 @@ The user goes through the following end-to-end process:
 
 ## Todo
 
-1. Need to setup tailwindcss
-2. need to make the frontend
+1. make the login check setup for the quiz page but before that, implement the quiz setup and ensure that it works.
+2. CAn make a table on the landing page for all the people who have played the quiz.
+3. Dockerize this stuff.
+4. fix the random console logs for debugging.
+
+## Status:
+
+The backend and frontend are integrated. The user data is stored on the backend database.
+
+## Local Testing:
+
+Before following through, make sure the following ports on your loaclhost are not preoccupied: 5173 (frontend), 5000(backend), 27017 (mongodb)
+
+Now follow the commands:
+
+```bash
+# once you're inside the cloned repo ... get into the quiz task directory
+cd B01-QUIZ
+
+#mongodb
+cd backend
+docker compose up
+
+#backend server
+npm install
+npm start
+
+#frontend
+cd ../frontend
+npm install
+npm run dev
+```
