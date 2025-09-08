@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
+import jjkImage from "./assets/jjk.jpg";
+import narutoImage from "./assets/naruto.jpg";
+import steinsImage from "./assets/steins;gate.png";
+import demonSlayerImage from "./assets/demonslayer.jpg";
 
 export default function Quiz() {
   const { username, userid, fav_anime } = useParams();
@@ -12,7 +16,10 @@ export default function Quiz() {
 
   // Countdown timer
   useEffect(() => {
-    if (timeLeft <= 0) return;
+    if (timeLeft <= 0) {
+      setCurrentIndex(10);
+      return;
+    }
     const interval = setInterval(() => setTimeLeft((t) => t - 1), 1000);
     return () => clearInterval(interval);
   }, [timeLeft]);
@@ -185,14 +192,20 @@ export default function Quiz() {
     }
   }, [currentIndex, score]);
 
+  const bannerImages = {
+    jjk: jjkImage,
+    naruto: narutoImage,
+    "steins;gate": steinsImage,
+    demon_slayer: demonSlayerImage,
+  };
   return (
     <div className="min-h-screen bg-background text-foreground px-4 sm:px-8 py-6 relative overflow-hidden">
       {/* Banner */}
-      <div className="w-full h-40 sm:h-56 md:h-64 rounded-xl overflow-hidden mb-6">
+      <div className="w-full sm:h-56 md:h-75 lg:h-125 rounded-xl overflow-hidden mb-6">
         <img
-          src="/placeholder-banner.jpg" // replace with fav_anime-specific banner
-          alt={`${fav_anime} banner`}
-          className="w-full h-full object-cover"
+          src={bannerImages[fav_anime]} // replace with fav_anime-specific banner
+          alt={`${fav_anime} bannerrr`}
+          className="w-full h-auto object-cover"
         />
       </div>
 
