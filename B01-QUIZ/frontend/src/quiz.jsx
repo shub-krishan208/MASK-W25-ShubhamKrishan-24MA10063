@@ -4,6 +4,7 @@ import jjkImage from "./assets/jjk.jpg";
 import narutoImage from "./assets/naruto.jpg";
 import steinsImage from "./assets/steins;gate.png";
 import demonSlayerImage from "./assets/demonslayer.jpg";
+import "./index.css";
 
 export default function Quiz() {
   const { username, userid, fav_anime } = useParams();
@@ -57,20 +58,33 @@ export default function Quiz() {
     }
     getQuestion();
   }, [fav_anime]);
+
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const currentQ = quiz[currentIndex];
+  const question = currentQ?.question;
+  const options = currentQ?.options;
+  const [shuffled, setShuffled] = useState([]);
+  // Fisher–Yates shuffle
+  const shuffleArray = (arr) => {
+    if (!arr) return [];
+    const copy = [...arr];
+    for (let i = copy.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [copy[i], copy[j]] = [copy[j], copy[i]];
+    }
+    return copy;
+  };
+
   useEffect(() => {
-    console.log("quiz data: ", quiz);
-  }, [quiz]);
+    if (options && options.length > 0) {
+      setShuffled(shuffleArray(options));
+    }
+  }, [currentQ]); // Changed dependency to re-shuffle on every new question
 
   const checkSymbol = async (sym) => {
     try {
       const res = await fetch(
-        `http://localhost:5000/api/verify/${currentQ._id}?userAnswer=${sym}`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
+        `http://localhost:5000/api/verify/${currentQ._id}?userAnswer=${sym}`
       );
       if (!res.ok) {
         const err = (await res.json()) || "unknown error";
@@ -78,7 +92,6 @@ export default function Quiz() {
         return false;
       }
       const data = await res.json();
-      console.log("Verification received: ", data);
       return data.isCorrect;
     } catch (err) {
       console.error("Error verifying the answer.", err);
@@ -120,42 +133,16 @@ export default function Quiz() {
         console.error("Error while updating score: ", err.message);
         return false;
       }
-      console.log("Score upadted. ");
+      console.log("Score updated.");
       return;
     } catch (err) {
       console.error("Error updating the score.", err);
     }
   };
 
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const currentQ = quiz[currentIndex];
-  const question = currentQ?.question;
-  const options = currentQ?.options;
-  const [shuffled, setShuffled] = useState([]);
-  // Fisher–Yates shuffle
-  const shuffleArray = (arr) => {
-    const copy = [...arr];
-    for (let i = copy.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [copy[i], copy[j]] = [copy[j], copy[i]];
-    }
-    return copy;
-  };
-
-  useEffect(() => {
-    if (options && options.length > 0) {
-      setShuffled(shuffleArray(options));
-    }
-  }, [question, options]);
-
   const finalScore = async () => {
     try {
-      const res = await fetch(`http://localhost:5000/api/getscore/${userid}`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      const res = await fetch(`http://localhost:5000/api/getscore/${userid}`);
       if (!res.ok) {
         const err = (await res.json()) || "unknown error";
         console.error("Error while getting score: ", err.message);
@@ -172,25 +159,17 @@ export default function Quiz() {
   useEffect(() => {
     if (currentIndex > 9) {
       const getSetFinal = async () => {
-        console.log("Getting final score ...");
-        try {
-          const ans = await finalScore();
-          if (ans) {
-            setFinal(ans);
-          } else {
-            console.log("Error receiving the final score.");
-          }
-        } catch (err) {
-          throw new Error("Error to fetch final score: ", err);
+        const ans = await finalScore();
+        if (ans !== false) {
+          setFinal(ans);
         }
       };
       getSetFinal();
-    } else {
-      // sending score data
-      console.log(`sending score: ${score}`);
+    } else if (currentIndex > 0) {
+      // Only send score after the first question is answered
       sendScore(score);
     }
-  }, [currentIndex, score]);
+  }, [currentIndex]); // Simplified dependency array
 
   const bannerImages = {
     jjk: jjkImage,
@@ -198,27 +177,54 @@ export default function Quiz() {
     "steins;gate": steinsImage,
     demon_slayer: demonSlayerImage,
   };
+
+  const THEME_CLASSES = [
+    "theme-jjk",
+    "theme-naruto",
+    "theme-steinsgate",
+    "theme-demon_slayer",
+  ];
+
+  // --- THEME MANAGEMENT START ---
+  useEffect(() => {
+    if (fav_anime) {
+      const themeClass = `theme-${fav_anime.replace(";", "")}`;
+      // CHANGED: Target the <html> element instead of <body> for better specificity
+      const root = document.documentElement;
+
+      root.classList.remove(...THEME_CLASSES);
+      root.classList.add(themeClass);
+
+      return () => {
+        root.classList.remove(themeClass);
+      };
+    }
+  }, [fav_anime]);
+  // --- THEME MANAGEMENT END ---
+
   return (
     <div className="min-h-screen bg-background text-foreground px-4 sm:px-8 py-6 relative overflow-hidden">
       {/* Banner */}
-      <div className="w-full sm:h-56 md:h-75 lg:h-125 rounded-xl overflow-hidden mb-6">
+      <div className="w-full sm:h-50 md:h-70 lg:h-125 rounded-xl overflow-hidden mb-6">
         <img
-          src={bannerImages[fav_anime]} // replace with fav_anime-specific banner
-          alt={`${fav_anime} bannerrr`}
-          className="w-full h-auto object-cover"
+          src={bannerImages[fav_anime]}
+          alt={`${fav_anime} banner`}
+          className="w-full h-full object-cover object-center"
         />
       </div>
 
       {/* Dashboard */}
       <div className="flex items-center justify-between mb-8">
         <div className="flex gap-2">
-          <span className="text-lg sm:text-xl font-semibold text-primary">
+          <span className="text-lg sm:text-xl font-semibold text-accent">
             👤 {username}
           </span>
         </div>
         <div className="flex items-center gap-6 text-lg sm:text-xl font-semibold">
-          <span className="text-primary">⏱ {formatTime(timeLeft)}</span>
-          <span className="text-primary">⭐ {score}</span>
+          {/* CHANGED: Using `text-secondary` for the timer */}
+          <span className="text-secondary">⏱ {formatTime(timeLeft)}</span>
+          {/* CHANGED: Using `text-accent` to make the score pop */}
+          <span className="text-accent">⭐ {score}</span>
           <Link
             to="/"
             className="text-lg sm:text-xl font-semibold text-primary hover:underline"
@@ -231,7 +237,7 @@ export default function Quiz() {
       {/* Question */}
       <div className="mb-6">
         <h2 className="text-xl sm:text-2xl font-bold text-center">
-          {currentIndex <= 9 && `${currentIndex + 1}. ${question}`}
+          {currentIndex <= 9 && currentQ && `${currentIndex + 1}. ${question}`}
         </h2>
       </div>
 
@@ -239,7 +245,6 @@ export default function Quiz() {
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-2xl mx-auto">
         {currentIndex <= 9 &&
           shuffled?.map((opt) => {
-            // determine button style
             let btnClass =
               "w-full px-4 py-3 rounded-xl border transition-all font-medium text-left backdrop-blur-md ";
 
@@ -252,16 +257,17 @@ export default function Quiz() {
                   "bg-red-500 text-white border-red-600 shadow-[0_0_15px_rgba(239,68,68,0.8)]";
               }
             } else {
-              // default + hover
+              // CHANGED: The default button state now uses the `secondary` color for its border and glow.
+              // This makes the `primary` color on hover more impactful.
               btnClass +=
-                "bg-card/30 border-primary/40 shadow-[0_0_10px_hsl(var(--primary)/0.4)] hover:bg-primary hover:text-primary-foreground hover:scale-105 hover:shadow-[0_0_20px_hsl(var(--primary)/0.7)]";
+                "bg-card/30 border-secondary/50 shadow-[0_0_10px_hsl(var(--secondary)/0.4)] hover:bg-primary hover:text-primary-foreground hover:scale-105 hover:shadow-[0_0_20px_hsl(var(--primary)/0.7)]";
             }
 
             return (
               <button
                 key={opt._id}
                 onClick={() => handleOptionClick(opt.symbol, opt._id)}
-                disabled={!!selectedOption} // disable clicks until next q
+                disabled={!!selectedOption}
                 className={btnClass}
               >
                 {opt.text}
@@ -280,25 +286,28 @@ export default function Quiz() {
             Thanks for playing,{" "}
             <span className="font-semibold">{username}</span>!
           </p>
+          {/* CHANGED: Using `text-accent` and a pulse animation to make the final score stand out. */}
           <p className="text-2xl sm:text-3xl font-bold">
-            ⭐ Your Score: <span className="text-primary">{final}</span>
+            ⭐ Your Score:{" "}
+            <span className="text-accent animate-pulse">{final}</span>
           </p>
 
           <div className="flex gap-4 mt-4">
+            {/* CHANGED: This is now styled as the primary action button. */}
             <button
               onClick={() => window.location.reload()}
-              className="px-6 py-3 rounded-xl border-2 border-primary text-primary font-semibold 
-             hover:bg-primary hover:text-primary-foreground shadow-md 
-             transition-colors duration-200"
+              className="px-6 py-3 rounded-xl bg-primary text-primary-foreground font-semibold 
+               hover:scale-105 shadow-md transition-transform duration-200"
             >
               ➰ Play Again
             </button>
 
+            {/* CHANGED: This is now styled as the secondary action button. */}
             <button
               onClick={() => (window.location.href = "/")}
-              className="px-6 py-3 rounded-xl border-2 border-primary text-primary font-semibold 
-             hover:bg-primary hover:text-primary-foreground shadow-md 
-             transition-colors duration-200"
+              className="px-6 py-3 rounded-xl border-2 border-secondary text-secondary font-semibold 
+               hover:bg-secondary hover:text-secondary-foreground shadow-md 
+               transition-colors duration-200"
             >
               🏠 Home
             </button>

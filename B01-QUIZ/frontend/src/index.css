@@ -97,6 +97,79 @@
   --ring: 210 100% 65%;
 }
 
+/* === Jujutsu Kaisen Theme === */
+/* Inspired by the stark red, black, and white of the manga-style art. */
+.theme-jjk {
+  --background: 0 0% 8%; /* near black */
+  --foreground: 0 0% 95%; /* off-white */
+  --card: 0 0% 12%;
+  --card-foreground: 0 0% 95%;
+  --primary: 0 85% 55%; /* strong, aggressive red */
+  --primary-foreground: 0 0% 100%;
+  --secondary: 0 0% 60%; /* medium gray */
+  --accent: 210 100% 60%; /* gojo's eye blue as a surprise accent */
+  --border: 0 0% 20%;
+  --input: 0 0% 15%;
+  --ring: 0 85% 55%;
+}
+
+/* === Naruto Theme === */
+/* Inspired by the dynamic, darker, and more vibrant tones of Team 7 (Naruto, Sasuke, Sakura)
+   as depicted in the provided image. */
+:root.theme-naruto {
+  /* IMPORTANT: Ensure this selector is `:root.theme-naruto` */
+  --background: 220 20% 12%; /* Deep, dark blue-purple, inspired by Sasuke's side */
+  --foreground: 40 100% 90%; /* Warm, bright yellow-white for text, referencing Naruto's energy */
+
+  --card: 220 20% 18%; /* Slightly lighter dark card background */
+  --card-foreground: 40 100% 90%;
+
+  --primary: 25 95% 55%; /* Fiery Naruto Orange, keeping this strong as the main highlight */
+  --primary-foreground: 0 0% 0%; /* Black text on orange */
+
+  --secondary: 220 80% 55%; /* Sasuke's electric blue, for accents and secondary actions */
+  --secondary-foreground: 0 0% 100%; /* White text on blue */
+
+  --accent: 140 70% 50%; /* Sakura's vibrant green, for smaller highlights or special elements */
+  --accent-foreground: 0 0% 0%; /* Black text on green */
+
+  --border: 220 20% 30%; /* Darker, subtle border */
+  --input: 220 20% 25%; /* Darker input background */
+  --ring: 25 95% 55%; /* Ring color matches primary orange */
+}
+
+/* === Steins;Gate Theme === */
+/* Inspired by the gritty, desaturated, and vintage feel of the series. */
+.theme-steinsgate {
+  --background: 40 10% 15%; /* dark, grungy brown */
+  --foreground: 45 30% 85%; /* faded sepia text */
+  --card: 40 10% 20%;
+  --card-foreground: 45 30% 85%;
+  --primary: 30 70% 60%; /* nixie tube orange glow */
+  --primary-foreground: 0 0% 0%;
+  --secondary: 160 20% 40%; /* desaturated lab coat teal */
+  --accent: 0 30% 55%; /* kurisu's reddish-brown */
+  --border: 40 10% 30%;
+  --input: 40 10% 25%;
+  --ring: 30 70% 60%;
+}
+
+/* === Demon Slayer Theme === */
+/* Inspired by the colors of Tanjiro, Nezuko, and Zenitsu. */
+.theme-demon_slayer {
+  --background: 260 20% 10%; /* deep night purple */
+  --foreground: 180 20% 90%; /* pale mint white */
+  --card: 260 20% 15%;
+  --card-foreground: 180 20% 90%;
+  --primary: 175 60% 40%; /* tanjiro's haori teal */
+  --primary-foreground: 0 0% 100%;
+  --secondary: 340 80% 70%; /* nezuko's kimono pink */
+  --accent: 50 90% 60%; /* zenitsu's lightning yellow */
+  --border: 260 15% 30%;
+  --input: 260 15% 20%;
+  --ring: 175 60% 40%;
+}
+
 /* Keyframes */
 @keyframes float {
   0%,
@@ -122,7 +195,7 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground font-sans;
+    @apply bg-background text-foreground font-sans transition-colors duration-500; /* Added transition! */
   }
 }
 
