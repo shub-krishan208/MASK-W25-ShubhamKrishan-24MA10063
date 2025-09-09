@@ -43,7 +43,7 @@ async function populateJJKQuestions() {
         { symbol: "itadori", text: "Naruto" },
         { symbol: "sukuna", text: "Hunter x Hunter" },
       ],
-      answer: "itadori", // Note: This is based on popular fan interpretations.
+      answer: "geto", // Note: This is based on popular fan interpretations.
     },
     {
       animeName: "jjk",

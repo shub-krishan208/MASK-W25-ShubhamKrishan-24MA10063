@@ -14,7 +14,7 @@ const PORT = 5000;
 
 app.use(e.json());
 
-app.use(cors({ origin: ["http://localhost:5173"] }));
+app.use(cors({ origin: ["http://localhost:5174"] }));
 
 const dbURI =
   "mongodb://salieri:maho8kurisu@localhost:27017/quizApp?authSource=admin";
